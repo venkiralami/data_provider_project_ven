@@ -29,7 +29,7 @@ pipeline {
                 stage('Smoke Tests') {
                      agent { label "${params.TARGET_NODE}" }
                     steps {
-                        echo "Running Smoke tests on node: ${params.TARGET_NODE2}"
+						echo "Running Test type:: ${params.GROUPS} on node:: ${params.TARGET_NODE}"
                        dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
                         bat "mvn clean test -Dgroups=smoke -Dexcel.path=${params.EXCEL_PATH}"
                     }
