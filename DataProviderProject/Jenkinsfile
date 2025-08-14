@@ -1,25 +1,69 @@
+
 pipeline {
-     agent { label "${params.TARGET_NODE}" }  // Dynamic node
-    
+    agent none   // We'll assign agents dynamically in stages
+
     parameters {
-        string(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
-   
-        string(name: 'GROUPS', defaultValue: 'smoke,sanity,regression', description: 'Comma-separated TestNG groups')
-        string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/testng.xml', description: 'Excel file path')
+        node(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
+        string(name: 'GROUPS', defaultValue: 'smoke,regression,sanity', description: 'Comma-separated TestNG groups')
+        string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/src/main/java/utils/groups/testdata.xlsx', description: 'Excel test data path')
     }
 
     stages {
-        stage('Run Tests') {
-    steps {
-        dir('DataProviderProject') { // change to your project folder
-            sh """
-                mvn clean test \
-                -Dgroups=${params.GROUPS} \
-                -Dexcel.path=${params.EXCEL_PATH}
-            """
+
+        stage('Checkout Code') {
+            agent { label "${params.TARGET_NODE}" }
+            steps {
+                echo "Running checkout on node: ${params.TARGET_NODE}"
+                dir('DataProviderProject') { 
+                git branch: 'master', url: 'https://github.com/venkiralami/data_provider_project_ven.git'
+                }
+            }
+        }
+
+        stage('Run Tests in Parallel') {
+            parallel {
+                stage('Smoke Tests') {
+                    agent { label "${params.TARGET_NODE}" }
+                    steps {
+                        echo "Running Smoke tests on node: ${params.TARGET_NODE}"
+                       dir('DataProviderProject') { 
+                        bat "mvn clean test -Dgroups=smoke -Dexcel.path=${params.EXCEL_PATH}"
+                    }
+                    }
+                }
+                stage('Regression Tests') {
+                    agent { label "${params.TARGET_NODE}" }
+                    steps {
+						dir('DataProviderProject') { 
+                        echo "Running Regression tests on node: ${params.TARGET_NODE}"
+                        bat "mvn clean test -Dgroups=regression -Dexcel.path=${params.EXCEL_PATH}"
+                    }
+                    }
+                }
+                stage('Sanity Tests') {
+                    agent { label "${params.TARGET_NODE}" }
+                    steps {
+						dir('DataProviderProject') { 
+                        echo "Running Sanity tests on node: ${params.TARGET_NODE}"
+                        bat "mvn clean test -Dgroups=sanity -Dexcel.path=${params.EXCEL_PATH}"
+                    }
+                    }
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo "Pipeline finished at: ${new Date()}"
+        }
+        success {
+            echo "All tests completed successfully!"
+        }
+        failure {
+            echo "Some tests failed. Check the console output for details."
         }
     }
 }
 
-    }
-}
