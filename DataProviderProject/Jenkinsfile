@@ -3,18 +3,22 @@ pipeline {
     agent any   // We'll assign agents dynamically in stages
 
     parameters {
-        string(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
+        string(name: 'TARGET_NODE', defaultValue: 'node1', description: 'Select agent/node1 to run tests')
+        string(name: 'TARGET_NODE1', defaultValue: 'node1', description: 'Select agent/node1 to run tests')
+        string(name: 'TARGET_NODE2', defaultValue: 'node2', description: 'Select agent/node2 to run tests')
+        string(name: 'TARGET_NODE3', defaultValue: 'node3', description: 'Select agent/node3 to run tests')
+       
         string(name: 'GROUPS', defaultValue: 'smoke,regression,sanity', description: 'Comma-separated TestNG groups')
-        string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/src/main/java/utils/groups/testdata.xlsx', description: 'Excel test data path')
+        string(name: 'EXCEL_PATH', defaultValue: '/testng.xml', description: 'Excel test data path')
     }
 
     stages {
 
         stage('Checkout Code') {
-            agent { label "${params.TARGET_NODE}" }
+            agent { label "${params.TARGET_NODE1}" }
             steps {
-                echo "Running checkout on node: ${params.TARGET_NODE}"
-                dir('DataProviderProject') { 
+                echo "Running checkout on node: ${params.TARGET_NODE1}"
+                dir('DataProviderProject/DataProviderProject') { 
                 git branch: 'master', url: 'https://github.com/venkiralami/data_provider_project_ven.git'
                 }
             }
@@ -23,28 +27,28 @@ pipeline {
         stage('Run Tests in Parallel') {
             parallel {
                 stage('Smoke Tests') {
-                    agent { label "${params.TARGET_NODE}" }
+                     agent { label "${params.TARGET_NODE2}" }
                     steps {
-                        echo "Running Smoke tests on node: ${params.TARGET_NODE}"
-                       dir('DataProviderProject') { 
+                        echo "Running Smoke tests on node: ${params.TARGET_NODE2}"
+                       dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
                         bat "mvn clean test -Dgroups=smoke -Dexcel.path=${params.EXCEL_PATH}"
                     }
                     }
                 }
                 stage('Regression Tests') {
-                    agent { label "${params.TARGET_NODE}" }
+                     agent { label "${params.TARGET_NODE3}" }
                     steps {
-						dir('DataProviderProject') { 
-                        echo "Running Regression tests on node: ${params.TARGET_NODE}"
-                        bat "mvn clean test -Dgroups=regression -Dexcel.path=${params.EXCEL_PATH}"
+                        echo "Running Regression tests on node: ${params.TARGET_NODE3}"
+						dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
+                        bat 'mvn clean test -Dgroups=regression'
                     }
                     }
                 }
                 stage('Sanity Tests') {
-                    agent { label "${params.TARGET_NODE}" }
+                     agent { label "${params.TARGET_NODE2}" }
                     steps {
-						dir('DataProviderProject') { 
-                        echo "Running Sanity tests on node: ${params.TARGET_NODE}"
+                        echo "Running Sanity tests on node: ${params.TARGET_NODE2}"
+						dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
                         bat "mvn clean test -Dgroups=sanity -Dexcel.path=${params.EXCEL_PATH}"
                     }
                     }
@@ -66,4 +70,3 @@ pipeline {
         }
     }
 }
-
