@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'node1' }
 
     parameters {
         string(name: 'GROUPS', defaultValue: 'smoke,sanity,regression', description: 'Comma-separated TestNG groups')
