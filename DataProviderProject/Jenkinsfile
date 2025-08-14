@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'GROUPS', defaultValue: 'smoke, sanity, regression', description: 'Comma-separated TestNG groups')
+        string(name: 'GROUPS', defaultValue: 'smoke,sanity,regression', description: 'Comma-separated TestNG groups')
         string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/testng.xml', description: 'Excel file path')
     }
 
