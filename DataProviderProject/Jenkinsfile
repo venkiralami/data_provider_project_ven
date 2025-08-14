@@ -18,19 +18,19 @@ pipeline {
             agent { label "${params.TARGET_NODE}" }
             steps {
                 echo "Running checkout on node: ${params.TARGET_NODE}"
-                dir('DataProviderProject/DataProviderProject') { 
+                
                 git branch: 'master', url: 'https://github.com/venkiralami/data_provider_project_ven.git'
-                }
+                
             }
         }
 
         stage('Run Tests in Parallel') {
             parallel {
-                stage('Smoke Tests') {
+                stage('Build and Tests') {
                      agent { label "${params.TARGET_NODE}" }
                     steps {
 						echo "Running Test type:: ${params.GROUPS} on node:: ${params.TARGET_NODE}"
-                       dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
+                       dir('DataProviderProject') { 
                         bat "mvn clean test -Dgroups=${params.GROUPS} -Dexcel.path=${params.EXCEL_PATH}"
                     }
                     }
