@@ -2,7 +2,7 @@ pipeline {
      agent { label "${params.TARGET_NODE}" }  // Dynamic node
     
     parameters {
-        node(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
+        string(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
    
         string(name: 'GROUPS', defaultValue: 'smoke,sanity,regression', description: 'Comma-separated TestNG groups')
         string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/testng.xml', description: 'Excel file path')
