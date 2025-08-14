@@ -2,19 +2,22 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'GROUPS', defaultValue: 'Smoke,Regression', description: 'Comma-separated TestNG groups')
-        string(name: 'EXCEL_PATH', defaultValue: 'src/test/resources/testdata.xlsx', description: 'Excel file path')
+        string(name: 'GROUPS', defaultValue: 'smoke, sanity, regression', description: 'Comma-separated TestNG groups')
+        string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/testng.xml', description: 'Excel file path')
     }
 
     stages {
         stage('Run Tests') {
-            steps {
-                sh """
-                    mvn clean test \
-                    -Dgroups=${params.GROUPS} \
-                    -Dexcel.path=${params.EXCEL_PATH}
-                """
-            }
+    steps {
+        dir('DataProviderProject') { // change to your project folder
+            sh """
+                mvn clean test \
+                -Dgroups=${params.GROUPS} \
+                -Dexcel.path=${params.EXCEL_PATH}
+            """
         }
+    }
+}
+
     }
 }
