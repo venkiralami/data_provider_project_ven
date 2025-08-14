@@ -15,9 +15,9 @@ pipeline {
     stages {
 
         stage('Checkout Code') {
-            agent { label "${params.TARGET_NODE1}" }
+            agent { label "${params.TARGET_NODE}" }
             steps {
-                echo "Running checkout on node: ${params.TARGET_NODE1}"
+                echo "Running checkout on node: ${params.TARGET_NODE}"
                 dir('DataProviderProject/DataProviderProject') { 
                 git branch: 'master', url: 'https://github.com/venkiralami/data_provider_project_ven.git'
                 }
@@ -27,7 +27,7 @@ pipeline {
         stage('Run Tests in Parallel') {
             parallel {
                 stage('Smoke Tests') {
-                     agent { label "${params.TARGET_NODE2}" }
+                     agent { label "${params.TARGET_NODE}" }
                     steps {
                         echo "Running Smoke tests on node: ${params.TARGET_NODE2}"
                        dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
@@ -35,24 +35,8 @@ pipeline {
                     }
                     }
                 }
-                stage('Regression Tests') {
-                     agent { label "${params.TARGET_NODE3}" }
-                    steps {
-                        echo "Running Regression tests on node: ${params.TARGET_NODE3}"
-						dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
-                        bat 'mvn clean test -Dgroups=regression'
-                    }
-                    }
-                }
-                stage('Sanity Tests') {
-                     agent { label "${params.TARGET_NODE2}" }
-                    steps {
-                        echo "Running Sanity tests on node: ${params.TARGET_NODE2}"
-						dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
-                        bat "mvn clean test -Dgroups=sanity -Dexcel.path=${params.EXCEL_PATH}"
-                    }
-                    }
-                }
+                
+               
             }
         }
 
