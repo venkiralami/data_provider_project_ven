@@ -31,7 +31,7 @@ pipeline {
                     steps {
 						echo "Running Test type:: ${params.GROUPS} on node:: ${params.TARGET_NODE}"
                        dir('DataProviderProject/DataProviderProject/DataProviderProject') { 
-                        bat "mvn clean test -Dgroups=smoke -Dexcel.path=${params.EXCEL_PATH}"
+                        bat "mvn clean test -Dgroups=${params.GROUPS} -Dexcel.path=${params.EXCEL_PATH}"
                     }
                     }
                 }
