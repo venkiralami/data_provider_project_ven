@@ -1,9 +1,9 @@
 
 pipeline {
-    agent none   // We'll assign agents dynamically in stages
+    agent any   // We'll assign agents dynamically in stages
 
     parameters {
-        node(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
+        string(name: 'TARGET_NODE', defaultValue: 'any', description: 'Select agent/node to run tests')
         string(name: 'GROUPS', defaultValue: 'smoke,regression,sanity', description: 'Comma-separated TestNG groups')
         string(name: 'EXCEL_PATH', defaultValue: 'DataProviderProject/src/main/java/utils/groups/testdata.xlsx', description: 'Excel test data path')
     }
