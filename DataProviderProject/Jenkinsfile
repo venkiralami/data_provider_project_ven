@@ -22,7 +22,7 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/venkiralami/data_provider_project_ven.git'
                 
             }
-        }
+        } 
 
         stage('Run Tests in Webhook ') {
             parallel {
