@@ -24,7 +24,7 @@ pipeline {
             }
         }
 
-        stage('Run Tests in Webhook ') {
+        stage('Run Tests in Webhook') {
             parallel {
                 stage('Build and Tests') {
                      agent { label "${params.TARGET_NODE}" }
