@@ -8,7 +8,7 @@ pipeline {
         string(name: 'TARGET_NODE2', defaultValue: 'node2', description: 'Select agent/node2 to run tests')
         string(name: 'TARGET_NODE3', defaultValue: 'node3', description: 'Select agent/node3 to run tests')
        
-        string(name: 'GROUPS', defaultValue: 'smoke,regression,sanity', description: 'Comma-separated TestNG groups')
+        string(name: 'GROUPS', defaultValue: 'smoke', description: 'Comma-separated TestNG groups')
         string(name: 'EXCEL_PATH', defaultValue: '/testng.xml', description: 'Excel test data path')
     }
 
@@ -37,7 +37,7 @@ pipeline {
                        dir('DataProviderProject') { 
                         bat "mvn clean test -Dgroups=${params.GROUPS} -Dexcel.path=${params.EXCEL_PATH}"
                     }
-                    } 
+                  } 
                 }
                 
                
