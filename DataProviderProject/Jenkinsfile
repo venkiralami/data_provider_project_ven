@@ -1,5 +1,5 @@
 
-pipeline {
+pipeline {  
     agent any    // We'll assign agents dynamically in stages
 
     parameters { 
