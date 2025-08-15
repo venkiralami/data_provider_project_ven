@@ -10,7 +10,7 @@ pipeline {
         
         string(name: 'GROUPS', defaultValue: 'smoke', description: 'Comma-separated TestNG groups')
         string(name: 'EXCEL_PATH', defaultValue: '/testng.xml', description: 'Excel test data path')
-    }
+    } 
   
     stages {
  	stage('Print Webhook UUID') {
