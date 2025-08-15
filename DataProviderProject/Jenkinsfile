@@ -13,7 +13,11 @@ pipeline {
     }
 
     stages {
-
+ 	stage('Print Webhook UUID') {
+            steps {
+                echo "Webhook UUID: ${params['jenkins-generic-webhook-trigger-plugin_uuid']}"
+            }
+        }
         stage('Checkout Code') {
             agent { label "${params.TARGET_NODE}" }
             steps {
