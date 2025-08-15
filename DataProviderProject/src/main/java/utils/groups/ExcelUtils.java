@@ -22,7 +22,7 @@ public class ExcelUtils {
                     Cell cell = row.getCell(j);
                     String header = headerRow.getCell(j).getStringCellValue();
                     rowData.put(header, cell != null ? cell.toString() : "");
-                }
+                 }
                 data.add(rowData);
             }
         } catch (Exception e) {
