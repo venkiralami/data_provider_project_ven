@@ -17,14 +17,14 @@ pipeline {
         stage('Checkout Code') {
             agent { label "${params.TARGET_NODE}" }
             steps {
-                echo "Running checkout on node: ${params.TARGET_NODE}"
+                echo " Web Hook Running checkout on node: ${params.TARGET_NODE}"
                 
                 git branch: 'master', url: 'https://github.com/venkiralami/data_provider_project_ven.git'
                 
             }
         }
 
-        stage('Run Tests in Parallel') {
+        stage('Run Tests in Webhook') {
             parallel {
                 stage('Build and Tests') {
                      agent { label "${params.TARGET_NODE}" }
