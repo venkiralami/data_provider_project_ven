@@ -2,7 +2,7 @@
 pipeline {  
     agent any    // We'll assign agents dynamically in stages
 
-    parameters {   
+    parameters {    
         string(name: 'TARGET_NODE', defaultValue: 'node1', description: 'Select agent/node1 to run tests')
         string(name: 'TARGET_NODE1', defaultValue: 'node1', description: 'Select agent/node1 to run tests')
         string(name: 'TARGET_NODE2', defaultValue: 'node2', description: 'Select agent/node2 to run tests')
